@@ -30,16 +30,15 @@ function App() {
       alert("Install Metamask")
     }
   }                
-  const idChain = useCallBack(async () => {
+  const idChain = async () => {
 
     let currentChain = await web3.eth.getChainId()
     for (let index = 0; index < Chains.length; index++) {
       if (currentChain === Chains[index].networkId) {
         setChainId({ ...Chains[index]})
-        break;
       }
     }
-  })
+  }
 
   useEffect(() => {
     // Accounts
@@ -53,7 +52,7 @@ function App() {
     }
     
 
-  }, [isConnectedWeb3, accounts, chainId,web3.eth, idChain])
+  }, [isConnectedWeb3, accounts, chainId,web3.eth])
   
   const sendEth=
     async () => {
