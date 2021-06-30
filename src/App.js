@@ -104,7 +104,7 @@ function App() {
            
               {
                 isConnectedWeb3
-                  ? <p>Connected : <a href={`${chainId.explorers[0].url}/address/${accounts[0]}` } target="_blank">My address</a></p>
+                  ? <p>Connected : <a href={`${chainId.explorers[0].url}/address/${accounts[0]}` } target="_blank" rel="noreferrer">My address</a></p>
                   : <button onClick={connectToWeb3}>Connect to web3</button>
                   }
               
