@@ -11,7 +11,7 @@ function App() {
   const [web3] = useState(new Web3(Web3.givenProvider || "ws://localhost:8545"))
   const [weiToSend, setWeiToSend] = useState(0)
   const [addressToSend, setAddressToSend] = useState("")
-  const [chainId, setChainId] = useState(0)
+  const [chainId, setChainId] = useState({})
   const [isMined, setIsMined] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
 
@@ -40,17 +40,20 @@ function App() {
       }
     }
   }
-  
+
   useEffect(() => {
     // Accounts
     const getAccounts = async () => setAccounts(await web3.eth.getAccounts())
     const getBalance = async () => setBalance(await web3.eth.getBalance(accounts[0]))
 
     if (accounts.length === 0) getAccounts()
-    if (accounts.length > 0) getBalance()
-    idChain()
+    if (accounts.length > 0) {
+      getBalance() 
+      idChain()
+    }
+    
 
-  }, [isConnectedWeb3, accounts, chainId, web3, idChain])
+  }, [isConnectedWeb3, accounts, chainId])
   
   const sendEth =
     async () => {
