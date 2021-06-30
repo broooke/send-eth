@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react"
+import React, {useEffect, useState, useCallBack} from "react"
 import Web3 from "web3"
 import Chains from "./chains/chains.json"
 import './App.css';
@@ -30,7 +30,7 @@ function App() {
       alert("Install Metamask")
     }
   }                
-  const idChain = async () => {
+  const idChain = useCallBack(async () => {
 
     let currentChain = await web3.eth.getChainId()
     for (let index = 0; index < Chains.length; index++) {
@@ -39,7 +39,7 @@ function App() {
         break;
       }
     }
-  }
+  })
 
   useEffect(() => {
     // Accounts
@@ -53,9 +53,9 @@ function App() {
     }
     
 
-  }, [isConnectedWeb3, accounts, chainId, web3])
+  }, [isConnectedWeb3, accounts, chainId,web3.eth, idChain])
   
-  const sendEth =
+  const sendEth=
     async () => {
 
       
