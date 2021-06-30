@@ -1,4 +1,4 @@
-import React, {useEffect, useState, useCallBack} from "react"
+import React, {useEffect, useState} from "react"
 import Web3 from "web3"
 import Chains from "./chains/chains.json"
 import './App.css';
