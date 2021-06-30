@@ -53,7 +53,7 @@ function App() {
     }
     
 
-  }, [isConnectedWeb3, accounts, chainId, idChain, web3])
+  }, [isConnectedWeb3, accounts, chainId, web3])
   
   const sendEth =
     async () => {
