@@ -11,7 +11,6 @@ function App() {
   const [web3] = useState(new Web3(Web3.givenProvider || "ws://localhost:8545"))
   const [weiToSend, setWeiToSend] = useState(0)
   const [addressToSend, setAddressToSend] = useState("")
-  const [chain, setChain]= useState("")
   const [chainId, setChainId] = useState(0)
   const [isMined, setIsMined] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
@@ -41,7 +40,7 @@ function App() {
     if (accounts.length > 0) getBalance()
     idChain()
 
-  }, [isConnectedWeb3, accounts, chainId])
+  }, [isConnectedWeb3, accounts, chainId, web3, idChain])
   
   const sendEth =
     async () => {
