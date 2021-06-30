@@ -30,7 +30,17 @@ function App() {
       alert("Install Metamask")
     }
   }                
+  const idChain = async () => {
 
+    let currentChain = await web3.eth.getChainId()
+    for (let index = 0; index < Chains.length; index++) {
+      if (currentChain === Chains[index].networkId) {
+        setChainId({ ...Chains[index]})
+        break;
+      }
+    }
+  }
+  
   useEffect(() => {
     // Accounts
     const getAccounts = async () => setAccounts(await web3.eth.getAccounts())
@@ -59,16 +69,7 @@ function App() {
       }
     }
 
-  const idChain = async () => {
-
-      let currentChain = await web3.eth.getChainId()
-      for (let index = 0; index < Chains.length; index++) {
-        if (currentChain === Chains[index].networkId) {
-          setChainId({ ...Chains[index]})
-          break;
-        }
-      }
-    }
+ 
 
   return (
     <div className="App-flex">
