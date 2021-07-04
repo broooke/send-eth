@@ -60,7 +60,7 @@ function App() {
       
         if(web3.utils.isAddress) {
           setIsLoading(true)
-      await web3.eth.sendTransaction({ from: accounts[0], to: addressToSend, value: weiToSend }) 
+      await web3.eth.sendTransaction({ from: accounts[0], to: addressToSend, value: web3.utils.toWei(weiToSend.toString())}) 
       .on('receipt', () => {
         setIsLoading(false)
       setIsMined(true)
@@ -77,7 +77,7 @@ function App() {
     <div className="App-flex">
             <div>
                 <h1>Wallet App</h1>
-                <p>Amount {chainId.chain} : {Math.pow(10, -18) * balance} { chainId.shortName}</p>
+                <p>Amount {chainId.chain} : {web3.utils.fromWei(balance.toString())} { chainId.shortName}</p>
                 <label>Address </label>
                 <input type="text"
                 value={addressToSend}
@@ -93,20 +93,19 @@ function App() {
                 {weiToSend >0 && addressToSend ?
                 <button onClick={sendEth}>Envoyer</button> : <button disabled="disabled">Envoyer</button>
                   }
-                {isLoading ?
-                isMined? 
-                <p>Transaction succes</p> : <p>Loading...</p>: 
-                null }
+                { isLoading ? 
+                  <p>Loading...</p> : !isLoading && isMined ?
+                <p>Transaction succes</p> : null}
                 
         
             </div>
             <div className="connect">
-            <p>On {chainId.name}</p>
+            <p>{chainId.name}</p>
 
            
               {
                 isConnectedWeb3
-                  ? <p>Connected : <a href={`${chainId.explorers[0].url}/address/${accounts[0]}` } target="_blank" rel="noreferrer">My address</a></p>
+                  ? <p>Connected : <a href={`${chainId.explorers.url}/address/${accounts[0]}` } target="_blank" rel="noreferrer">My address</a></p>
                   : <button onClick={connectToWeb3}>Connect to web3</button>
                   }
               
