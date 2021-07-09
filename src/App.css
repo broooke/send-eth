@@ -2,6 +2,10 @@
   display: flex;
   justify-content: space-around;
 }
+.send-column {
+  display: flex;
+  flex-direction: column;
+}
 
 .connect button {
   float: right;

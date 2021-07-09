@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from "react"
 import Web3 from "web3"
 import Chains from "./chains/chains.json"
+import TokenDapp from './components/TokenDapp'
 import './App.css';
 
 function App() {
@@ -14,7 +15,7 @@ function App() {
   const [chainId, setChainId] = useState({})
   const [isMined, setIsMined] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
-
+ 
 
   const connectToWeb3 =
   async () => {
@@ -36,6 +37,7 @@ function App() {
     for (let index = 0; index < Chains.length; index++) {
       if (currentChain === Chains[index].networkId) {
         setChainId({ ...Chains[index]})
+        break;
       }
     }
   }
@@ -52,63 +54,57 @@ function App() {
     }
     
 
-  }, [isConnectedWeb3, accounts, chainId,web3.eth])
+  }, [isConnectedWeb3, accounts, chainId, web3])
   
   const sendEth=
     async () => {
 
-      
-        if(web3.utils.isAddress) {
-          setIsLoading(true)
-      await web3.eth.sendTransaction({ from: accounts[0], to: addressToSend, value: web3.utils.toWei(weiToSend.toString())}) 
-      .on('receipt', () => {
-        setIsLoading(false)
-      setIsMined(true)
-      
-         })} 
-        else {
-        alert("Wrong Address")
-      }
+    if(web3.utils.isAddress) {
+
+            try {
+                    setIsLoading(true)
+                    await web3.eth.sendTransaction({ from: accounts[0], to: addressToSend, value: web3.utils.toWei(weiToSend.toString())}) 
+                    .on('receipt', () => {
+                    setIsLoading(false)
+                    setIsMined(true)
+                    })
+                }
+                catch(error){
+                    setIsLoading(null)
+                    alert("Wrong Address")
+                }
+        }
     }
 
  
 
   return (
     <div className="App-flex">
+      <div className="send-column">
             <div>
                 <h1>Wallet App</h1>
-                <p>Amount {chainId.chain} : {web3.utils.fromWei(balance.toString())} { chainId.shortName}</p>
-                <label>Address </label>
-                <input type="text"
-                value={addressToSend}
-                onChange={(e)=> setAddressToSend(e.target.value)
-               }>
-                </input> <br/><br/>
+                <p>Amount {chainId.chain} : {web3.utils.fromWei(balance.toString())} { chainId.shortName}</p> 
+                <label>Address </label><input type="text" value={addressToSend} onChange={(e)=> setAddressToSend(e.target.value)}></input> 
+                <br/><br/>
             
-                <label>Amount </label> 
-                <input type="number"
-                value={weiToSend}
-                onChange={(e)=> setWeiToSend(e.target.value)}>
-                </input> <br/><br/>
+                <label>Amount </label> <input type="number" value={weiToSend} onChange={(e)=> setWeiToSend(e.target.value)}></input>
+                <br/><br/>
                 {weiToSend >0 && addressToSend ?
-                <button onClick={sendEth}>Envoyer</button> : <button disabled="disabled">Envoyer</button>
-                  }
-                { isLoading ? 
-                  <p>Loading...</p> : !isLoading && isMined ?
-                <p>Transaction succes</p> : null}
-                
-        
+                  <button onClick={sendEth}>Envoyer</button> : <button disabled="disabled">Envoyer</button>
+                }
+                {isLoading ? 
+                <p>Loading...</p> : !isLoading && isMined ? <p>Transaction succes</p> : null
+                }
             </div>
+            <TokenDapp accounts={accounts} chainId={chainId} isConnectedWeb3={isConnectedWeb3}/>
+      </div>
             <div className="connect">
-            <p>{chainId.name}</p>
-
-           
-              {
-                isConnectedWeb3
-                  ? <p>Connected : <a href={`${chainId.explorers.url}/address/${accounts[0]}` } target="_blank" rel="noreferrer">My address</a></p>
-                  : <button onClick={connectToWeb3}>Connect to web3</button>
-                  }
-              
+              <p>{chainId.name}</p>
+                {
+                  isConnectedWeb3
+                    ? <p>Connected : <a href={`${chainId.explorers[0].url}/address/${accounts[0]}` } target="_blank" rel="noreferrer">My address</a></p>
+                    : <button onClick={connectToWeb3}>Connect to web3</button>
+                    }
             </div>
                                                
     </div>
